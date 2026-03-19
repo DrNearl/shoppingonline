@@ -6,7 +6,8 @@ const OrderSchema = mongoose.Schema({
   cdate: Number,
   total: Number,
   customer: Object,
-  items: Array
+  items: Array,
+  status: String
 });
 
 const Order = mongoose.model('order', OrderSchema);
@@ -24,6 +25,18 @@ class OrderDAO {
     return orders;
   }
 
+  static async selectAll() {
+    const query = {};
+    const mysort = { cdate: -1 }; // descending
+    const orders = await Order.find(query).sort(mysort).exec();
+    return orders;
+  }
+
+  static async update(_id, newStatus) {
+    const newvalues = { status: newStatus };
+    const result = await Order.findByIdAndUpdate(_id, newvalues, { new: true });
+    return result;
+  }
 }
 
 module.exports = OrderDAO;

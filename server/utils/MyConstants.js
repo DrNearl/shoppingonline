@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const MyConstants = {
   DB_SERVER: process.env.DB_SERVER,
   DB_USER: process.env.DB_USER,

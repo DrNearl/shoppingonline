@@ -171,12 +171,14 @@ router.post('/orders', JwtUtil.checkToken, async function(req, res) {
   const body = req.body;
   const mongoose = require('mongoose');
 
+  // GÁN CỨNG TRẠNG THÁI "PENDING" Ở ĐÂY
   const order = {
     _id: new mongoose.Types.ObjectId(),
     cdate: new Date().getTime(),
     total: body.total,
     customer: body.customer,
-    items: body.items
+    items: body.items,
+    status: "PENDING" 
   };
 
   const result = await OrderDAO.insert(order);

@@ -6,6 +6,7 @@ const JwtUtil = require('../utils/JwtUtil');
 const AdminDAO = require('../models/AdminDAO');
 const CategoryDAO = require('../models/CategoryDAO');
 const ProductDAO = require('../models/ProductDAO');
+const OrderDAO = require('../models/OrderDAO'); // Bổ sung OrderDAO
 
 // --- LOGIN ---
 router.post('/login', async function (req, res) {
@@ -118,6 +119,27 @@ router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
   try {
     const _id = req.params.id;
     const result = await ProductDAO.delete(_id);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// --- ORDERS ---
+router.get('/orders', JwtUtil.checkToken, async function (req, res) {
+  try {
+    const orders = await OrderDAO.selectAll();
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.put('/orders/status/:id', JwtUtil.checkToken, async function (req, res) {
+  try {
+    const _id = req.params.id;
+    const newStatus = req.body.status;
+    const result = await OrderDAO.update(_id, newStatus);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

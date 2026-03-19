@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./utils/MongooseUtil');
 
 const express = require('express');
 const cors = require('cors');
@@ -15,8 +16,7 @@ app.get('/hello', (req, res) => {
     res.json({ message: 'Hello from server' });
 });
 
-const PORT = 3000;
-
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log("Server running on port " + PORT);
 });
@@ -28,3 +28,5 @@ app.use('/api/admin', require('./api/admin.js'));
 app.use('/api/customer', require('./api/customer.js'));
 
 app.use(express.json());
+
+console.log("Server is running on port " + PORT);

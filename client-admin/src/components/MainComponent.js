@@ -5,9 +5,12 @@ import Home from './HomeComponent';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Category from './CategoryComponent';
 import Product from './ProductComponent';
+import Order from './OrderComponent';
+import Login from './LoginComponent';
 
 class Main extends Component {
   static contextType = MyContext;
+  
   render() {
     if (this.context.token !== '') {
       return (
@@ -19,12 +22,13 @@ class Main extends Component {
             <Route path='/admin/category' element={<Category />} />
             <Route path='/admin/product' element={<Product />} />
             <Route path="/admin/home" element={<Home />} />
+            <Route path='/admin/order' element={<Order />} /> 
           </Routes>
 
         </div>
       );
     }
-    return (<div />);
+    return (<Login />);
   }
 }
 
