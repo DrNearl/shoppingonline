@@ -6,6 +6,21 @@ const cors = require('cors');
 
 const app = express();
 const admin = require('./api/admin');
+
+const path = require('path');
+
+// Serve admin panel
+app.use('/admin', express.static(path.resolve(__dirname, '../client-admin/build')));
+app.get('admin/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client-admin/build', 'index.html'));
+});
+
+// Serve customer site
+app.use('/', express.static(path.resolve(__dirname, '../client-customer/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client-customer/build', 'index.html'));
+});
+
 app.use(cors());
 
 app.use(express.json());
