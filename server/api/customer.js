@@ -67,6 +67,15 @@ router.post('/active', async function (req, res) {
   res.json(result);
 });
 
+// update profile
+router.put('/customers/:id', JwtUtil.checkToken, async function (req, res) {
+  const _id = req.params.id;
+  const customer = req.body;
+  customer._id = _id;
+  const result = await CustomerDAO.update(customer);
+  res.json(result);
+});
+
 router.get('/categories', async function(req, res) {
   const categories = await CategoryDAO.selectAll();
   res.json(categories);

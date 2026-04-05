@@ -6,7 +6,7 @@ class Home extends Component {
       <div className="align-center">
         <h2 className="text-center">ADMIN HOME</h2>
         <img 
-          src="http://cliparting.com/wp-content/uploads/2018/03/animated-emoticons-2018-13.gif" 
+          src="https://housedesign.vn/wp-content/uploads/2020/03/thiet-ke-noi-that-shop-thoi-trang.jpg" 
           width="800px" 
           height="600px" 
           alt="" 

@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import withRouter from '../utils/withRouter'; // Gọi utils/withRouter để điều hướng
 import MyContext from '../contexts/MyContext';
 
 class ProductDetail extends Component {
-  static contextType = MyContext;
+  static contextType = MyContext; // Sử dụng context để lưu trạng thái giỏ hàng
 
   constructor(props) {
     super(props);
@@ -14,71 +15,110 @@ class ProductDetail extends Component {
   }
 
   componentDidMount() {
-    const id = window.location.pathname.split('/')[2];
+    const params = this.props.params;
+    this.apiGetProduct(params.id);
+  }
 
-    axios.get('/api/customer/products/' + id)
-      .then(res => {
-        this.setState({ product: res.data });
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Cannot load product");
-      });
+  // API lấy chi tiết sản phẩm
+  apiGetProduct(id) {
+    axios.get('/api/customer/products/' + id).then((res) => {
+      const result = res.data;
+      this.setState({ product: result });
+    }).catch(err => {
+      console.error(err);
+      alert("Cannot load product");
+    });
   }
 
   render() {
-    const p = this.state.product;
-
-    if (!p) return (<div>Loading...</div>);
-
-    return (
-      <div>
-
-        <h2>{p.name}</h2>
-
-        <img
-          src={p.image
-            ? "data:image/jpg;base64," + p.image
-            : "/no-image.png"}
-          width="300"
-          alt={p.name}
-        />
-
-        <h3>${p.price}</h3>
-
-        <p>{p.description}</p>
-
-        <div>
-          Quantity:
-          <input
-            type="number"
-            min="1"
-            value={this.state.txtQuantity}
-            onChange={(e) =>
-              this.setState({ txtQuantity: e.target.value })
-            }
-          />
-
-          <button onClick={(e) => this.btnAdd2CartClick(e)}>
-            ADD TO CART
-          </button>
+    const prod = this.state.product;
+    
+    if (prod != null) {
+      return (
+        <div className="align-center">
+          <h2 className="text-center">PRODUCT DETAILS</h2>
+          <figure className="caption-right">
+            <img src={"data:image/jpg;base64," + prod.image} width="400px" height="400px" alt="product" />
+            <figcaption>
+              <form>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td align="right">ID:</td>
+                      <td>{prod._id}</td>
+                    </tr>
+                    <tr>
+                      <td align="right">Name:</td>
+                      <td>{prod.name}</td>
+                    </tr>
+                    <tr>
+                      <td align="right">Price:</td>
+                      <td>${prod.price}</td>
+                    </tr>
+                    <tr>
+                      <td align="right">Category:</td>
+                      <td>{prod.category.name}</td>
+                    </tr>
+                    <tr>
+                      <td align="right">Quantity:</td>
+                      <td>
+                        <input 
+                          type="number" 
+                          min="1" 
+                          max="99" 
+                          value={this.state.txtQuantity} 
+                          onChange={(e) => { this.setState({ txtQuantity: e.target.value }) }} 
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>
+                        <input 
+                          type="submit" 
+                          value="ADD TO CART" 
+                          onClick={(e) => this.btnAdd2CartClick(e)} 
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
+            </figcaption>
+          </figure>
         </div>
-
-      </div>
-    );
+      );
+    }
+    return (<div />);
   }
 
+  // Xử lý sự kiện thêm vào giỏ hàng
   btnAdd2CartClick(e) {
+    e.preventDefault();
     const product = this.state.product;
-    const quantity = this.state.txtQuantity;
-
-    const item = {
-      product: product,
-      quantity: quantity
-    };
-
-    this.context.add2cart(item);
+    const quantity = parseInt(this.state.txtQuantity);
+    
+    if (quantity) {
+      const mycart = this.context.mycart;
+      // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+      const index = mycart.findIndex(x => x.product._id === product._id); 
+      
+      if (index === -1) { 
+        // Chưa có -> thêm mới
+        const newItem = { product: product, quantity: quantity };
+        mycart.push(newItem);
+      } else { 
+        // Đã có -> tăng số lượng
+        mycart[index].quantity += quantity;
+      }
+      
+      this.context.setMycart(mycart);
+      alert('OK BABY!');
+    } else {
+      alert('Please input quantity');
+    }
   }
 }
 
-export default ProductDetail;
+// Bọc Component bằng withRouter trước khi export
+export default withRouter(ProductDetail);

@@ -8,6 +8,7 @@ import ProductDetail from './ProductDetailComponent';
 import Category from './CategoryComponent';
 import Search from './SearchComponent';
 import Mycart from './MycartComponent';
+import Myprofile from './MyprofileComponent';
 import Myorders from './MyordersComponent';
 
 import Signup from './SignupComponent';
@@ -36,6 +37,8 @@ class Main extends Component {
             <Route path="/search/:keyword" element={<Search />} />
 
             <Route path="/mycart" element={<Mycart />} />
+            
+            <Route path="/myprofile" element={<Myprofile />} />
 
             <Route path="/myorders" element={<Myorders />} />
 

@@ -8,7 +8,7 @@ function Login() {
   const navigate = useNavigate();
   const context = useContext(MyContext);
 
-  const [txtUsername, setUsername] = useState('sonkk');
+  const [txtUsername, setUsername] = useState('user');
   const [txtPassword, setPassword] = useState('123');
 
   const btnLoginClick = (e) => {

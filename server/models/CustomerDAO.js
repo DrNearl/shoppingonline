@@ -39,6 +39,18 @@ const CustomerDAO = {
     const customers = await Models.Customer.find(query).exec();
     return customers;
   },
+
+  async update(customer) {
+    const newvalues = { 
+      username: customer.username, 
+      password: customer.password, 
+      name: customer.name, 
+      phone: customer.phone, 
+      email: customer.email 
+    };
+    const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
+    return result;
+  },
   
   async selectByID(_id) {
     const customer = await Models.Customer.findById(_id).exec();
