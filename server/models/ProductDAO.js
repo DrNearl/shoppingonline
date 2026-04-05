@@ -50,7 +50,13 @@ const ProductDAO = {
   async selectByID(_id) {
   const product = await Models.Product.findById(_id).exec();
   return product;
-},
+  },
+
+  async selectByCatID(_cid) {
+    const query = { 'category._id': _cid };
+    const products = await Models.Product.find(query).exec();
+    return products;
+  },
 
   async selectTopNew(top) {
     const query = {};

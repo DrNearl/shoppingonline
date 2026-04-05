@@ -32,9 +32,9 @@ class Main extends Component {
 
             <Route path="/product/:id" element={<ProductDetail />} />
 
-            <Route path="/category/:id" element={<Category />} />
-
-            <Route path="/search/:keyword" element={<Search />} />
+            <Route path="/product/category/:cid" element={<Category />} />
+            
+            <Route path="/product/search/:keyword" element={<Search />} /> 
 
             <Route path="/mycart" element={<Mycart />} />
             

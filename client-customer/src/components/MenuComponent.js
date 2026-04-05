@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import withRouter from '../utils/withRouter'; // Thêm import này
 
 class Menu extends Component {
 
@@ -12,11 +13,11 @@ class Menu extends Component {
   }
 
   render() {
-
     const cates = this.state.categories.map((item) => {
       return (
         <li key={item._id} className="menu">
-          <Link to={"/category/" + item._id}>
+          {/* Sửa URL: thêm /product/ trước category */}
+          <Link to={"/product/category/" + item._id}>
             {item.name}
           </Link>
         </li>
@@ -25,7 +26,6 @@ class Menu extends Component {
 
     return (
       <div className="border-bottom">
-
         <div className="float-left">
           <ul className="menu">
             <li className="menu">
@@ -37,24 +37,16 @@ class Menu extends Component {
 
         <div className="float-right">
           <form className="search" onSubmit={(e) => this.search(e)}>
-
             <input
               type="search"
               placeholder="Enter keyword"
               className="keyword"
               ref={(c) => this.txtKeyword = c}
             />
-
-            <input
-              type="submit"
-              value="SEARCH"
-            />
-
+            <input type="submit" value="SEARCH" />
           </form>
         </div>
-
         <div className="float-clear"></div>
-
       </div>
     );
   }
@@ -70,16 +62,17 @@ class Menu extends Component {
       })
       .catch(err => {
         console.error(err);
-        alert("Cannot load categories");
       });
   }
 
   search(e) {
     e.preventDefault();
     const keyword = this.txtKeyword.value;
-    window.location.href = "/search/" + keyword;
+    // Dùng navigate thay vì window.location và sửa đúng URL
+    this.props.navigate("/product/search/" + keyword);
   }
 
 }
 
-export default Menu;
+// Nhớ bọc withRouter ở đây
+export default withRouter(Menu);
